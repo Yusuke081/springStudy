@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -62,5 +63,39 @@ mv.addObject("nam", nam + "の階乗は" + ans + "です");
 mv.setViewName("day20");
 return mv;
 }
+
+@RequestMapping(value="/day21",method=RequestMethod.GET)
+public ModelAndView day21get(ModelAndView mv) {
+	mv.addObject("suzuki", 0);
+	mv.setViewName("day21");
+	return mv;
+}
+@RequestMapping(value="/day21", method=RequestMethod.POST)
+public ModelAndView day21post(ModelAndView mv) {
+	mv.addObject("suzuki", "こんにちは");
+	mv.setViewName("day21");
+	return mv;
+}
+
+@RequestMapping("/day21_{prime}")
+public ModelAndView day21_2(@PathVariable int prime, ModelAndView mv) {
+	if(prime == 1) {
+		mv.addObject("prime", prime + "は素数ではありません...");
+	}else if(prime == 2) {
+		mv.addObject("prime", prime + "は素数です！");
+	}else{
+		for(int i = 2; i < prime; i++) {
+			if(prime % i == 0) {
+				mv.addObject("prime", prime + "は素数ではありません...");
+				break;
+			}else {
+				mv.addObject("prime", prime + "は素数です！");
+			}
+		}
+	}
+	mv.setViewName("day21_2");
+	return mv;
+}
+
 }
 
