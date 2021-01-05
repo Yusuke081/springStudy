@@ -5,6 +5,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.ArrayList;
+
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -97,5 +100,15 @@ public ModelAndView day21_2(@PathVariable int prime, ModelAndView mv) {
 	return mv;
 }
 
+@RequestMapping(value="/day22")
+public ModelAndView indexPost(ModelAndView mv) {
+	ArrayList<String[]>customers = new ArrayList<String[]>();
+	customers.add(new String[] {"佐藤HTML太郎","35歳","男性"});
+	customers.add(new String[] {"鈴木Java五郎","24歳","男性"});
+	customers.add(new String[] {"高橋CSS子","29歳","女性"});
+	mv.addObject("customers",customers);
+	mv.setViewName("day22");
+	return mv;
+}
 }
 
