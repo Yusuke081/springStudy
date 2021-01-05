@@ -103,9 +103,11 @@ public ModelAndView day21_2(@PathVariable int prime, ModelAndView mv) {
 @RequestMapping(value="/day22")
 public ModelAndView indexPost(ModelAndView mv) {
 	ArrayList<String[]>customers = new ArrayList<String[]>();
-	customers.add(new String[] {"佐藤HTML太郎","35歳","男性"});
-	customers.add(new String[] {"鈴木Java五郎","24歳","男性"});
-	customers.add(new String[] {"高橋CSS子","29歳","女性"});
+	customers.add(new String[] {"佐藤HTML太郎","35歳","男性","東京"});
+	customers.add(new String[] {"鈴木Java五郎","24歳","男性","大阪"});
+	customers.add(new String[] {"高橋CSS子","29歳","女性","京都"});
+	customers.add(new String[] {"高橋php","50歳","女性","北海道"});
+	customers.add(new String[] {"高橋python","19歳","女性","京都"});
 	mv.addObject("customers",customers);
 	mv.setViewName("day22");
 	return mv;
