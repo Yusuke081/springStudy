@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -7,8 +8,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+
+import java.util.Date;
 
 @Controller
 public class MainController{
@@ -112,5 +117,162 @@ public ModelAndView indexPost(ModelAndView mv) {
 	mv.setViewName("day22");
 	return mv;
 }
+
+@RequestMapping(value="/application" ,method=RequestMethod.GET)
+public ModelAndView applicationget(ModelAndView mv) {
+	List<String> area = new ArrayList<String>();
+	area.add("北海道");
+	area.add("東北");
+	area.add("関東");
+	area.add("信越");
+	area.add("北陸");
+	area.add("東海");
+	area.add("近畿");
+	area.add("中国");
+	area.add("四国");
+	area.add("九州");
+	area.add("沖縄");
+	mv.addObject("area",area);
+	mv.setViewName("application");
+	return mv;
+}
+
+@RequestMapping(value="/application", method=RequestMethod.POST)
+public ModelAndView applicationpost(ModelAndView mv, 
+		@RequestParam("myAddress")String myAddress, 
+		@RequestParam("shippingAddress")String shippingAddress, 
+		@RequestParam("size")int size,
+		@RequestParam("weight")int weight){
+	System.out.println(myAddress);
+	System.out.println(shippingAddress);	
+	System.out.println(size);
+	System.out.println(weight);
+	
+	int myAdd = Calculation(myAddress);
+	int sipAdd = Calculation(shippingAddress);
+	int num = myAdd - sipAdd;
+	int sub = Math.abs(num);
+	System.out.println(sub + "sub");
+	int totalCost = Cost(size, weight, sub);
+	
+	List<String> area = new ArrayList<String>();
+	area.add("北海道");
+	area.add("東北");
+	area.add("関東");
+	area.add("信越");
+	area.add("北陸");
+	area.add("東海");
+	area.add("近畿");
+	area.add("中国");
+	area.add("四国");
+	area.add("九州");
+	area.add("沖縄");
+	mv.addObject("area",area);
+	
+	mv.addObject("cost", "送料は" + totalCost + "円です。");
+	mv.setViewName("application");
+	return mv;
+	
+
+}
+
+private static int Calculation(String addres){
+	System.out.println(addres);
+	int areaNum = 0;
+	if(addres.equals("北海道")) {
+		areaNum += 1;
+	}else if(addres.equals("東北")) {
+		areaNum += 2;
+	}else if(addres.equals("関東")) {
+		areaNum += 3;
+	}else if(addres.equals("信越")) {
+		areaNum += 4;
+	}else if(addres.equals("北陸")) {
+		areaNum += 5;
+	}else if(addres.equals("東海")) {
+		areaNum += 6;
+	}else if(addres.equals("近畿")) {
+		areaNum += 7;
+	}else if(addres.equals("中国")) {
+		areaNum += 8;
+	}else if(addres.equals("四国")) {
+		areaNum += 9;
+	}else if(addres.equals("九州")) {
+		areaNum += 10;
+	}else if(addres.equals("沖縄")) {
+		areaNum += 11;
+	}
+	System.out.println(areaNum);
+	
+	
+	return areaNum;
+}
+private static int Cost(int size, int weight, int sub) {
+	int sizeCost = size*120;
+	int weightCost = 0;
+	int areaCost = 0;
+	
+	if(sub <= 2) {
+		areaCost += 800;
+	}else if(sub <= 4) {
+		areaCost += 1000;
+	}else if(sub <= 6) {
+		areaCost += 1200;
+	}else if(sub <= 8) {
+		areaCost += 1400;
+	}else if(sub <= 10) {
+		areaCost += 1600;
+	}else if(sub <= 11) {
+		areaCost += 1800;
+	}
+	
+	if(weight == 1) {
+		weightCost += 0;
+	}else if(weight == 2) {
+		weightCost += 500;
+	}else if(weight == 3) {
+		weightCost+= 1000;
+	}
+	
+	int totalCost = sizeCost + weightCost + areaCost;
+	return totalCost;
+}
+
+@Autowired
+UserDataRepository repository;
+
+@RequestMapping(value="/day23", method = RequestMethod.GET)
+public ModelAndView day23Get(ModelAndView mv) {
+	List<UserData> customers = repository.findAll();
+	mv.addObject("customers", customers);
+	mv.setViewName("day23");
+	return mv;
+}
+
+@RequestMapping(value="/day23", method = RequestMethod.POST)
+public ModelAndView day23post(@ModelAttribute("formModel") UserData userData, ModelAndView mv) {
+    repository.saveAndFlush(userData);
+    return new ModelAndView("redirect:/day23");
+}
+
+
+@Autowired
+ChatDataRepository ChatRepository;
+
+@RequestMapping(value="/board", method = RequestMethod.GET)
+public ModelAndView boardGet(ModelAndView mv) {
+	List<ChatData> customers = ChatRepository.findAll();	
+	mv.addObject("customers", customers);
+	mv.setViewName("board");
+	return mv;
+}
+
+@RequestMapping(value="/board", method = RequestMethod.POST)
+public ModelAndView boardpost(@ModelAttribute("formModel")ChatData chatData, ModelAndView mv) {
+	ChatRepository.saveAndFlush(chatData);
+	return new ModelAndView("redirect:/board");	
+}
+  
+
 }
 

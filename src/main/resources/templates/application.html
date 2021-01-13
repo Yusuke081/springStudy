@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-epuiv="content-type" charset="UTF-8">
+<link th:href="@{/css/stylesheet.css}" rel="stylesheet">
+<title>タイトル</title>
+</head>
+<body>
+<h1>送料計算</h1>
+    <form action="/application" method="POST">
+    　　  <p>配送元</p>
+        <select name="myAddress"　>
+        <option th:each="a:${area}"　th:text="${a}"></option>
+        </select>
+        <p>配送先</p>
+        <select name="shippingAddress"　>
+        <option th:each="a:${area}"　th:text="${a}"　th:value="${a}"></option>
+        </select>
+        <div>
+	        <p>荷物のサイズ</p>
+			<input type="radio" name="size" value=1>:60cm以下
+			<input type="radio" name="size" value=2>:80cm以下
+			<input type="radio" name="size" value=3>:100cm以下
+			<input type="radio" name="size" value=4>:120cm以下
+			<input type="radio" name="size" value=5>:140cm以下
+			<input type="radio" name="size" value=6>:160cm以下
+			<input type="radio" name="size" value=7>:170cm以下
+       </div>
+       <div>　
+	       <p>荷物の重さ</p>
+	        <input type="radio" name="weight" value=1>:25kg以下
+			<input type="radio" name="weight" value=2>:25kg～30kg以下
+			<input type="radio" name="weight" value=3>:30kg以上
+        </div>      
+    <input type="submit", value="送信">
+    </form>
+    
+
+        
+     <h2 th:text="${cost}"></h2>
+        
+         
+</body>
+</html>
